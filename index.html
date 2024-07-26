@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Forecast</title> 
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="#" class="home-button">Home</a>
+            <span class="app-name">Weather Wizard</span>
+        </nav>
+    </header>
+    <div class="bg">
+        <div class="marg">
+    <div class="weather-container">
+        <div id="today-weather" class="weather-section">
+            <h2>Today's Weather</h2>
+            <div id="today-result" class="weather-result"></div>
+        </div>
+        <div id="next-day-weather" class="weather-section">
+            <h2>Next Day's Predicted Weather</h2>
+            <div id="next-day-result" class="weather-result"></div>
+        </div>
+    </div>
+</div>
+    </div>
+
+    <script>
+        function fetchWeatherData() {
+            const today = new Date();
+            const nextDay = new Date();
+            nextDay.setDate(today.getDate() + 1);
+
+            const todayDateStr = today.toISOString().split('T')[0];
+            const nextDayDateStr = nextDay.toISOString().split('T')[0];
+
+            // Fetch today's weather data
+            fetch(`/fetch_current_weather`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch current weather');
+                }
+                return response.json();
+            })
+            .then(todayData => {
+                const tempCelsius = todayData.temp - 273.15; // Convert from Kelvin to Celsius
+                document.getElementById('today-result').innerText = 
+                    `Temperature: ${tempCelsius.toFixed(2)} °C, 
+                     Humidity: ${todayData.humidity} %, 
+                     Pressure: ${todayData.pressure} hPa, 
+                     Wind Speed: ${todayData.wind_speed} m/s`;
+                
+                // Prepare data for prediction
+                const postData = {
+                    temp_lag1: todayData.temp,
+                    humidity_lag1: todayData.humidity,
+                    pressure_lag1: todayData.pressure,
+                    wind_speed_lag1: todayData.wind_speed,
+                    day: nextDay.getDate()  // Use the next day’s date
+                };
+
+                // Fetch prediction for the next day
+                return fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postData)
+                });
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to get prediction');
+                }
+                return response.json();
+            })
+            .then(predictionData => {
+                const predicttempCelsius = predictionData.prediction - 273.15;
+                document.getElementById('next-day-result').innerText = 
+                    `Predicted Temperature for ${nextDayDateStr}: ${predicttempCelsius.toFixed(2)} °C`;
+            })
+            .catch(error => {
+                document.getElementById('next-day-result').innerText = `Error: ${error.message}`;
+            });
+        }
+
+        fetchWeatherData();
+    </script>
+</body>
+</html>

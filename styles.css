@@ -1,0 +1,101 @@
+Reset default styles
+body, h1, h2, p, div {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial, sans-serif';
+    background: linear-gradient(to right, #83a4d4, #b6fbff);
+    color: #333;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+header {
+    background: #004d7a;
+    width: 100%;
+    padding: 2vh;
+    box-shadow: 0 0.4vh 0.8vh rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    height: 8vh; 
+}
+
+.bg {
+    margin: 0;
+    height: calc(100vh - 8vh);
+    background-image: url('bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    margin-top: 8vh; 
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 80vw; 
+    margin: 0 auto;
+}
+
+.home-button {
+    font-size: 1.2rem;
+    color: white;
+    text-decoration: none;
+    background-color: #005d8f;
+    padding: 1vh 2vw; 
+    border-radius: 0.5rem; 
+    transition: background-color 0.3s ease;
+}
+
+.home-button:hover {
+    background-color: #0077b5;
+}
+
+.app-name {
+    font-size: 2rem; 
+    font-weight: bold;
+    color: white;
+}
+
+.weather-container {
+    width: 90%;
+    max-width: 80vw; 
+    margin: 12vh auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+}
+
+.marg{
+    padding-top: 12vh;
+}
+.weather-section {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2vh;
+    border-radius: 1rem; 
+    box-shadow: 0 0.4vh 0.6vh rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.weather-section:hover {
+    transform: translateY(-0.5vh); 
+}
+
+.weather-section h2 {
+    font-size: 1.8rem; 
+    margin-bottom: 1vh;
+    color: #004d7a;
+}
+
+.weather-result {
+    font-size: 1.2rem; 
+    line-height: 1.5;
+    color: #444;
+}
